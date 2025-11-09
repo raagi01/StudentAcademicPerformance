@@ -1,1 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Student Well-Being Survey — Bright Pastel</title>
+  <style>
+    :root{
+      --bg1:#fff8fb; --bg2:#ecfbff;
+      --card:#ffffff; --accent:#ff8ac6; --accent2:#7ab6ff;
+      --muted:#6b7280; --danger:#ef4444;
+    }
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(135deg,var(--bg1),var(--bg2));display:flex;align-items:center;justify-content:center;padding:28px}
+    .wrap{width:100%;max-width:920px;background:linear-gradient(180deg,rgba(255,255,255,0.95),#fff);border-radius:16px;padding:20px;box-shadow:0 18px 50px rgba(15,23,42,0.06);overflow:hidden}
+    header{display:flex;align-items:center;gap:14px}
+    header .logo{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:28px}
+    header h1{margin:0;font-size:20px}
+    header p{margin:0;color:var(--muted);font-size:13px}
+    .intro{padding:14px;margin-top:12px;border-radius:12px;background:linear-gradient(90deg, rgba(255,243,250,0.6), rgba(230,250,255,0.6));animation:fadeIn .9s ease}
+    .progress{height:10px;background:#f7f3ff;border-radius:999px;overflow:hidden;margin:14px 0}
+    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%;transition:width .45s ease}
+    form{display:block}
+    .section{display:none;padding:12px 6px;animation:slideIn .45s ease}
+    .section.active{display:block}
+    @keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    label{display:block;font-weight:700;margin-bottom:8px;color:#111827}
+    input[type=number],select,input[type=text],textarea{width:100%;padding:11px;border-radius:10px;border:1px solid #eef2f8;font-size:14px;box-sizing:border-box}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .col{flex:1 1 200px;min-width:140px}
+    .options{display:flex;gap:8px;flex-wrap:wrap}
+    .btn-opt{background:#fff7fb;border:1px solid #f4ecf7;padding:10px 12px;border-radius:12px;cursor:pointer;display:inline-flex;align-items:center;gap:10px;transition:transform .15s;user-select:none}
+    .btn-opt:hover{transform:translateY(-3px)}
+    .btn-opt.active{border-color:var(--accent);box-shadow:0 10px 30px rgba(122,122,255,0.06);background:linear-gradient(90deg,#fff,#fff6fb)}
+    .slider{display:flex;gap:12px;align-items:center}
+    input[type=range]{width:100%}
+    .small{font-size:13px;color:var(--muted)}
+    .controls{display:flex;justify-content:space-between;gap:12px;margin-top:16px;align-items:center}
+    button{padding:10px 14px;border-radius:10px;border:0;background:var(--accent);color:white;font-weight:700;cursor:pointer}
+    button.ghost{background:transparent;border:1px solid #eee;color:#111827}
+    button.secondary{background:var(--accent2)}
+    .phq-card{max-height:320px;overflow:auto;padding:12px;border-radius:10px;border:1px solid #f1f5f9;background:linear-gradient(180deg,#fff,#fffafc)}
+    .phq-item{padding:10px;border-bottom:1px dashed #f1f5f9}
+    .emoji-row{display:flex;gap:8px;margin-top:8px}
+    .emoji-btn{padding:8px;border-radius:10px;border:1px solid transparent;font-size:22px;cursor:pointer;background:#fff;width:52px;height:52px;display:inline-flex;align-items:center;justify-content:center}
+    .emoji-btn.active{background:linear-gradient(135deg,#fff0f8,#eef7ff);border-color:var(--accent)}
+    .legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+    .legend .item{background:#fff;padding:6px 8px;border-radius:8px;border:1px solid #f3f5ff;font-size:13px}
+    .summary{padding:12px;border-radius:10px;background:#f8fafc;margin-top:12px}
+    .hidden{display:none}
+    footer{margin-top:10px;color:var(--muted);font-size:13px;text-align:center}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.45);display:flex;align-items:center;justify-content:center;padding:20px}
+    .modal{background:white;padding:20px;border-radius:12px;max-width:640px;width:100%}
+    #confetti-canvas{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:9999}
+    @media(max-width:640px){.row{flex-direction:column}}
+  </style>
+</head>
+<body>
+  <div class="wrap" role="main" aria-labelledby="title">
+    <header>
+      <div class="logo">💬</div>
+      <div>
+        <h1 id="title">Student Well-Being Survey</h1>
+        <p class="small">Quick, anonymous, and friendly — ~3–5 minutes.</p>
+      </div>
+    </header>
 
+    <div class="intro" aria-live="polite">
+      <h3>🌟 We’re M.Tech students collecting data for our innovative assignment on student wellbeing.</h3>
+      <p>Your answers are anonymous — we just want honest insights 💭</p>
+      <p><strong>Let’s begin!</strong></p>
+    </div>
+
+    <div class="progress" aria-hidden="true"><i id="progressEl"></i></div>
+
+    <form id="surveyForm" autocomplete="off">
+      <!-- SECTION 1: Basic -->
+      <section class="section active" data-step="1">
+        <label>1) Age</label>
+        <input id="age" name="age" type="number" min="10" max="99" placeholder="Enter your age (e.g., 21)" required>
+        <div class="row" style="margin-top:12px">
+          <div class="col">
+            <label>2) Gender</label>
+            <select id="gender" name="gender">
+              <option value="">Prefer not to say</option>
+              <option value="Female">Female</option>
+              <option value="Male">Male</option>
+              <option value="Other">Non-binary / Other</option>
+            </select>
+          </div>
+        </div>
+     </section>
+
+      <!-- SECTION 2: Lifestyle -->
+      <section class="section" data-step="2">
+        <label>3) Average screen time (laptop + phone) — per day</label>
+        <div class="options" id="screen_time">
+          <div class="btn-opt" data-value="<3">Less than 3 hrs</div>
+          <div class="btn-opt" data-value="3-6">3–6 hrs</div>
+          <div class="btn-opt" data-value="6-9">6–9 hrs</div>
+          <div class="btn-opt" data-value=">9">More than 9 hrs</div>
+        </div>
+
+        <label style="margin-top:12px">4) Average sleep time (per night)</label>
+        <div class="options" id="sleep_time">
+          <div class="btn-opt" data-value="<5">Less than 5 hrs</div>
+          <div class="btn-opt" data-value="5-7">5–7 hrs</div>
+          <div class="btn-opt" data-value="7-9">7–9 hrs</div>
+          <div class="btn-opt" data-value=">9">More than 9 hrs</div>
+        </div>
+
+        <label style="margin-top:12px">5) Physical activity (0 = couch potato, 10 = gym legend)</label>
+        <div class="slider">
+          <input id="physical_activity" name="physical_activity" type="range" min="0" max="10" value="5">
+          <div id="activityVal" style="width:46px;text-align:center;font-weight:700">5</div>
+        </div>
+
+        <label style="margin-top:12px">6) Stress level lately</label>
+        <div class="options" id="stress_level">
+          <div class="btn-opt" data-value="Low">Low</div>
+          <div class="btn-opt" data-value="Medium">Medium</div>
+          <div class="btn-opt" data-value="High">High</div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Academic & Emotional -->
+      <section class="section" data-step="3">
+        <label>7) Do you feel anxious about your studies/exams?</label>
+        <div class="options" id="anxious_studies">
+          <div class="btn-opt" data-value="No">No</div>
+          <div class="btn-opt" data-value="Sometimes">Sometimes</div>
+          <div class="btn-opt" data-value="Often">Often</div>
+        </div>
+
+        <label style="margin-top:12px">8) How do you feel about your academic performance?</label>
+        <div class="options" id="academic_confidence">
+          <div class="btn-opt" data-value="Confident">Confident</div>
+          <div class="btn-opt" data-value="Satisfied">Satisfied</div>
+          <div class="btn-opt" data-value="Unsure">Not sure</div>
+          <div class="btn-opt" data-value="NotSatisfied">Not satisfied</div>
+        </div>
+
+        <label style="margin-top:12px">9) Do you overthink about your studies/future?</label>
+        <div class="options" id="overthinking">
+          <div class="btn-opt" data-value="Never">Never</div>
+          <div class="btn-opt" data-value="Sometimes">Sometimes</div>
+          <div class="btn-opt" data-value="VeryOften">Very often</div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: PHQ-9 (scrollable single card with emoji legend) -->
+      <section class="section" data-step="4">
+        <label>10) Quick mood check — past 2 weeks (scroll to answer all)</label>
+
+        <div class="legend" aria-hidden="true" style="margin-top:8px">
+          <div class="item">😄 = Not at all</div>
+          <div class="item">😐 = Several days</div>
+          <div class="item">😞 = More than half the days</div>
+          <div class="item">😔 = Nearly every day</div>
+        </div>
+
+        <div class="phq-card" id="phqCard" aria-label="PHQ-9 questions">
+          <div class="phq-item" data-key="phq1_interest">
+            <div><strong>1.</strong> No or little interest in doing anythin</div>
+            <div class="emoji-row" data-q="phq1_interest">
+              <button type="button" class="emoji-btn" data-value="0" title="Not at all">😄</button>
+              <button type="button" class="emoji-btn" data-value="1" title="Several days">😐</button>
+              <button type="button" class="emoji-btn" data-value="2" title="More than half the days">😞</button>
+              <button type="button" class="emoji-btn" data-value="3" title="Nearly every day">😔</button>
+            </div>
+          </div>
+
+          <div class="phq-item" data-key="phq2_down">
+            <div><strong>2.</strong> Feeling down, depressed, or hopeless</div>
+            <div class="emoji-row" data-q="phq2_down">
+              <button type="button" class="emoji-btn" data-value="0">😄</button>
+              <button type="button" class="emoji-btn" data-value="1">😐</button>
+              <button type="button" class="emoji-btn" data-value="2">😞</button>
+              <button type="button" class="emoji-btn" data-value="3">😔</button>
+            </div>
+          </div>
+
+          <div class="phq-item" data-key="phq3_sleep">
+            <div><strong>3.</strong> Irregular sleep schedules, or change in sleep patterns</div>
+            <div class="emoji-row" data-q="phq3_sleep">
+              <button type="button" class="emoji-btn" data-value="0">😄</button>
+              <button type="button" class="emoji-btn" data-value="1">😐</button>
+              <button type="button" class="emoji-btn" data-value="2">😞</button>
+              <button type="button" class="emoji-btn" data-value="3">😔</button>
+            </div>
+          </div>
+
+          <div class="phq-item" data-key="phq4_energy">
+            <div><strong>4.</strong> Feeling lethargic</div>
+            <div class="emoji-row" data-q="phq4_energy">
+              <button type="button" class="emoji-btn" data-value="0">😄</button>
+              <button type="button" class="emoji-btn" data-value="1">😐</button>
+              <button type="button" class="emoji-btn" data-value="2">😞</button>
+              <button type="button" class="emoji-btn" data-value="3">😔</button>
+            </div>
+          </div>
+
+          <div class="phq-item" data-key="phq5_appetite">
+            <div><strong>5.</strong> Poor appetite or overeating</div>
+            <div class="emoji-row" data-q="phq5_appetite">
+              <button type="button" class="emoji-btn" data-value="0">😄</button>
+              <button type="button" class="emoji-btn" data-value="1">😐</button>
+              <button type="button" class="emoji-btn" data-value="2">😞</button>
+              <button type="button" class="emoji-btn" data-value="3">😔</button>
+            </div>
+          </div>
+
+          <div class="phq-item" data-key="phq6_selfdoubt">
+            <div><strong>6.</strong> Self-doubt thoughts</div>
+            <div class="emoji-row" data-q="phq6_selfdoubt">
+              <button type="button" class="emoji-btn" data-value="0">😄</button>
+              <button type="button" class="emoji-btn" data-value="1">😐</button>
+              <button type="button" class="emoji-btn" data-value="2">😞</button>
+              <button type="button" class="emoji-btn" data-value="3">😔</button>
+            </div>
+          </div>
+
+          <div class="phq-item" data-key="phq7_focus">
+            <div><strong>7.</strong> Trouble concentrating on tasks, schoolwork, or daily activities</div>
+            <div class="emoji-row" data-q="phq7_focus">
+              <button type="button" class="emoji-btn" data-value="0">😄</button>
+              <button type="button" class="emoji-btn" data-value="1">😐</button>
+              <button type="button" class="emoji-btn" data-value="2">😞</button>
+              <button type="button" class="emoji-btn" data-value="3">😔</button>
+            </div>
+          </div>
+
+          <div class="phq-item" data-key="phq8_restless">
+            <div><strong>8.</strong> Feeling restless or slowed down compared to usual</div>
+            <div class="emoji-row" data-q="phq8_restless">
+              <button type="button" class="emoji-btn" data-value="0">😄</button>
+              <button type="button" class="emoji-btn" data-value="1">😐</button>
+              <button type="button" class="emoji-btn" data-value="2">😞</button>
+              <button type="button" class="emoji-btn" data-value="3">😔</button>
+            </div>
+          </div>
+
+          <div class="phq-item" data-key="phq9_selfharm">
+            <div><strong>9.</strong> Self-harming or suicadal thoughts</div>
+            <div class="emoji-row" data-q="phq9_selfharm">
+              <button type="button" class="emoji-btn" data-value="0">😄</button>
+              <button type="button" class="emoji-btn" data-value="1">😐</button>
+              <button type="button" class="emoji-btn" data-value="2">😞</button>
+              <button type="button" class="emoji-btn" data-value="3">😔</button>
+            </div>
+          </div>
+        </div>
+
+        </section>
+
+      <!-- SECTION 5: Reflection -->
+      <section class="section" data-step="5">
+        <label>11) Rate your overall mood right now</label>
+        <div class="emoji-row" id="mood_rating">
+          <button type="button" class="emoji-btn" data-value="5" title="Very good">🥰</button>
+          <button type="button" class="emoji-btn" data-value="4" title="Good">😊</button>
+          <button type="button" class="emoji-btn" data-value="3" title="Okay">😐</button>
+          <button type="button" class="emoji-btn" data-value="2" title="Low">😞</button>
+          <button type="button" class="emoji-btn" data-value="1" title="Very low">😭</button>
+        </div>
+
+        <label style="margin-top:12px">12) One small thing that helps you feel better (optional)</label>
+        <input id="feel_better" name="feel_better" type="text" placeholder="e.g., music, talking, a walk" maxlength="200">
+      </section>
+
+      <div class="controls" role="group" aria-label="navigation">
+        <button type="button" id="prevBtn" class="ghost">◀ Previous</button>
+        <div style="display:flex;gap:8px">
+          <button type="button" id="nextBtn" class="secondary">Next ▶</button>
+          <button type="button" id="submitBtn" style="background:linear-gradient(90deg,var(--accent),var(--accent2));display:none">Submit</button>
+        </div>
+      </div>
+    </form>
+
+    <div id="result" class="summary hidden" aria-live="polite"></div>
+
+    <footer>Made with ❤️ — skip any question if uncomfortable.</footer>
+  </div>
+
+  <!-- Modal for suicidal ideation resources -->
+  <div id="modal" class="hidden" role="dialog" aria-modal="true">
+    <div class="modal-backdrop">
+      <div class="modal">
+        <h3 style="margin-top:0">If you're struggling or had thoughts of self-harm</h3>
+        <p class="small">If you're in immediate danger, contact local emergency services now. Useful helplines:</p>
+        <ul>
+          <li><strong>India:</strong> KIRAN Helpline — 1800-599-0019</li>
+          <li><strong>US:</strong> 988 (suicide & crisis lifeline)</li>
+          <li><strong>UK:</strong> Samaritans — 116 123</li>
+        </ul>
+        <p class="small">Consider telling a trusted person or contacting a mental health professional.</p>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+          <button id="modalClose" class="ghost">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <script>
+    /********** CONFIG **********/
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQSh_mm6P-4dksKOlGNo1vbZnsqAplL5kqDko1MfOp1txhr7UtcXbRwr1q7KEmmTpJ/exec"; // <- replace after deploying Apps Script
+
+    // final column headers (server-side should have these in row 1, timestamp is added by server)
+    // Keep order in your Sheet exactly like this (timestamp first):
+    /*
+      timestamp, age, gender, screen_time, sleep_time, stress_level, physical_activity,
+      anxious_studies, academic_confidence, overthinking,
+      phq1_interest, phq1_interest_index,
+      phq2_down, phq2_down_index,
+      phq3_sleep, phq3_sleep_index,
+      phq4_energy, phq4_energy_index,
+      phq5_appetite, phq5_appetite_index,
+      phq6_selfdoubt, phq6_selfdoubt_index,
+      phq7_focus, phq7_focus_index,
+      phq8_restless, phq8_restless_index,
+      phq9_selfharm, phq9_selfharm_index,
+      mood_rating, feel_better
+    */
+
+    /********** UI stepper **********/
+    const sections = Array.from(document.querySelectorAll('.section'));
+    let step = 0;
+    const showStep = i => {
+      sections.forEach((s, idx)=> s.classList.toggle('active', idx===i));
+      step = i;
+      const pct = Math.round(((i+1)/sections.length)*100);
+      document.querySelector('.progress > i').style.width = pct + '%';
+      document.getElementById('prevBtn').style.display = i===0 ? 'none' : 'inline-block';
+      document.getElementById('nextBtn').style.display = i===sections.length-1 ? 'none' : 'inline-block';
+      document.getElementById('submitBtn').style.display = i===sections.length-1 ? 'inline-block' : 'none';
+    };
+    showStep(0);
+    document.getElementById('nextBtn').addEventListener('click', ()=> { if(step < sections.length-1) showStep(step+1); });
+    document.getElementById('prevBtn').addEventListener('click', ()=> { if(step > 0) showStep(step-1); });
+
+    /********** interactions **********/
+    document.querySelectorAll('.btn-opt').forEach(b=>{
+      b.addEventListener('click', ()=> {
+        const parent = b.parentElement;
+        parent.querySelectorAll('.btn-opt').forEach(x=> x.classList.remove('active'));
+        b.classList.add('active');
+      });
+    });
+
+    const activityInput = document.getElementById('physical_activity');
+    const activityVal = document.getElementById('activityVal');
+    activityInput.addEventListener('input', ()=> activityVal.textContent = activityInput.value);
+
+    // PHQ emoji single-select per question
+    document.querySelectorAll('.phq-card .emoji-row').forEach(row=>{
+      row.addEventListener('click', e=>{
+        const btn = e.target.closest('.emoji-btn');
+        if(!btn) return;
+        row.querySelectorAll('.emoji-btn').forEach(b=> b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // mood rating
+    document.getElementById('mood_rating').addEventListener('click', e=>{
+      const btn = e.target.closest('.emoji-btn');
+      if(!btn) return;
+      document.querySelectorAll('#mood_rating .emoji-btn').forEach(b=> b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+
+    /********** mapping **********/
+    const PHQ_MAP = { "0":"Not at all", "1":"Several days", "2":"More than half the days", "3":"Nearly every day" };
+    const MOOD_MAP = { "5":"Very good", "4":"Good", "3":"Okay", "2":"Low", "1":"Very low" };
+
+    /********** submit **********/
+    document.getElementById('submitBtn').addEventListener('click', async ()=>{
+      // collect
+      const payload = {};
+      payload.age = document.getElementById('age').value || '';
+      payload.gender = document.getElementById('gender').value || '';
+      const pickOpt = id => { const el = document.getElementById(id); return el?.querySelector('.btn-opt.active')?.dataset.value || ''; };
+      payload.screen_time = pickOpt('screen_time');
+      payload.sleep_time = pickOpt('sleep_time');
+      payload.stress_level = pickOpt('stress_level');
+      payload.physical_activity = document.getElementById('physical_activity').value || '';
+      payload.anxious_studies = pickOpt('anxious_studies');
+      payload.academic_confidence = pickOpt('academic_confidence');
+      payload.overthinking = pickOpt('overthinking');
+
+      // PHQ: send both text and index
+      ['phq1_interest','phq2_down','phq3_sleep','phq4_energy','phq5_appetite','phq6_selfdoubt','phq7_focus','phq8_restless','phq9_selfharm'].forEach(key=>{
+        const row = document.querySelector(`[data-q='${key}']`);
+        const active = row?.querySelector('.emoji-btn.active');
+        const idx = active ? active.dataset.value : '';
+        payload[key] = idx !== '' ? PHQ_MAP[idx] : '';
+        payload[ key + '_index' ] = idx !== '' ? Number(idx) : '';
+      });
+
+      // mood + free text
+      const moodActive = document.querySelector('#mood_rating .emoji-btn.active');
+      payload.mood_rating = moodActive ? (MOOD_MAP[moodActive.dataset.value] || moodActive.dataset.value) : '';
+      payload.feel_better = document.getElementById('feel_better').value || '';
+
+      // quick PHQ numeric sum (useful locally)
+      payload.phq_score = ['phq1_interest_index','phq2_down_index','phq3_sleep_index','phq4_energy_index','phq5_appetite_index','phq6_selfdoubt_index','phq7_focus_index','phq8_restless_index','phq9_selfharm_index']
+        .reduce((s,k)=> s + (Number(payload[k]) || 0), 0);
+
+      // show modal if any q9 > 0
+      if(payload.phq9_selfharm_index && payload.phq9_selfharm_index > 0){
+        document.getElementById('modal').classList.remove('hidden');
+      }
+
+      // send to Apps Script
+      if(!SCRIPT_URL || SCRIPT_URL.includes("PASTE_YOUR_APPS_SCRIPT_EXEC_URL_HERE")){
+        // fallback: present CSV for download
+        showSummaryAndCsv(payload, false);
+        return;
+      }
+
+      try{
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('submitBtn').textContent = 'Submitting...';
+        const res = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'cors',
+          credentials: 'omit',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        await res.text();
+        showThankYou();
+        showSummaryAndCsv(payload, true);
+      } catch(err){
+        console.error(err);
+        alert('Submission failed — we will prepare the CSV for you to download instead.');
+        showSummaryAndCsv(payload, false);
+      } finally{
+        document.getElementById('submitBtn').disabled = false;
+        document.getElementById('submitBtn').textContent = 'Submit';
+      }
+    });
+
+    function showSummaryAndCsv(payload, serverSaved){
+      const r = document.getElementById('result');
+      r.classList.remove('hidden');
+      r.innerHTML = `<h4>Summary${serverSaved ? ' — saved' : ''}</h4>
+        <div class="small">PHQ-9 score (sum): ${payload.phq_score}</div>
+        <pre style="white-space:pre-wrap">${JSON.stringify(payload, null, 2)}</pre>
+        <div style="margin-top:8px"><button id="downloadCsv" class="ghost">Download CSV</button> <button id="restart" class="ghost">Start Over</button></div>`;
+      document.getElementById('downloadCsv').addEventListener('click', ()=> {
+        const csv = convertToCsv(payload);
+        downloadTextFile(csv, 'survey_response.csv');
+      });
+      document.getElementById('restart').addEventListener('click', ()=> location.reload());
+    }
+
+    function convertToCsv(obj){
+      const headers = [
+        'age','gender','screen_time','sleep_time','stress_level','physical_activity',
+        'anxious_studies','academic_confidence','overthinking',
+        'phq1_interest','phq1_interest_index',
+        'phq2_down','phq2_down_index',
+        'phq3_sleep','phq3_sleep_index',
+        'phq4_energy','phq4_energy_index',
+        'phq5_appetite','phq5_appetite_index',
+        'phq6_selfdoubt','phq6_selfdoubt_index',
+        'phq7_focus','phq7_focus_index',
+        'phq8_restless','phq8_restless_index',
+        'phq9_selfharm','phq9_selfharm_index',
+        'mood_rating','feel_better'
+      ];
+      const row = headers.map(h => `"${String(obj[h] ?? '').replace(/"/g,'""')}"`);
+      return headers.join(',') + '\n' + row.join(',');
+    }
+
+    function downloadTextFile(text, filename){
+      const blob = new Blob([text], {type:'text/csv'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    /********** modal & confetti **********/
+    document.addEventListener('click', e=>{ if(e.target && e.target.id === 'modalClose') document.getElementById('modal').classList.add('hidden'); });
+
+    function showThankYou(){
+      const r = document.getElementById('result');
+      r.classList.remove('hidden');
+      r.innerHTML = `<h3>Thanks for helping us with our study 💫</h3><div class="small">We appreciate your honest responses.</div>`;
+      launchConfetti();
+    }
+
+    // tiny confetti
+    (function(){
+      const canvas = document.getElementById('confetti-canvas');
+      const ctx = canvas.getContext('2d');
+      let W = canvas.width = window.innerWidth;
+      let H = canvas.height = window.innerHeight;
+      window.addEventListener('resize', ()=> { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; });
+      function random(min,max){ return Math.random()*(max-min)+min; }
+      function Particle(){ this.x=random(0,W); this.y=random(-H,0); this.w=random(6,12); this.h=this.w*0.6; this.vx=random(-1,1); this.vy=random(2,6); this.rot=random(0,360); this.vr=random(-10,10); this.color=`hsl(${Math.floor(random(0,360))} 80% 60%)`; this.age=0; this.ttl=random(80,160); }
+      Particle.prototype.draw=function(){ ctx.save(); ctx.translate(this.x,this.y); ctx.rotate(this.rot*Math.PI/180); ctx.fillStyle=this.color; ctx.fillRect(-this.w/2,-this.h/2,this.w,this.h); ctx.restore(); };
+      let particles=[];
+      function launchConfetti(){ for(let i=0;i<120;i++) particles.push(new Particle()); function loop(){ ctx.clearRect(0,0,W,H); particles.forEach((p,i)=>{ p.y+=p.vy; p.x+=p.vx; p.rot+=p.vr*0.02; p.age++; p.draw(); }); particles=particles.filter(p=>p.age<p.ttl); if(particles.length>0) requestAnimationFrame(loop); } loop(); }
+      window.launchConfetti = launchConfetti;
+    })();
+
+    /********** accessibility small helpers **********/
+    document.querySelectorAll('input,select,textarea').forEach(el=> el.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); if(step < sections.length-1) showStep(step+1); } }));
+
+  </script>
+</body>
+</html>
