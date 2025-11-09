@@ -426,7 +426,7 @@
         document.getElementById('submitBtn').textContent = 'Submitting...';
         const res = await fetch(SCRIPT_URL, {
           method: 'POST',
-          mode: 'cors',
+          mode: 'no-cors',
           credentials: 'omit',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
@@ -515,6 +515,7 @@
   </script>
 </body>
 </html>
+
 
 
 
