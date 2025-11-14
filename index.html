@@ -82,8 +82,10 @@
           <div class="col">
             <label>2) Gender</label>
             <select id="gender" name="gender">
-              <option value="0">Female</option>
-              <option value="1">Male</option>
+              <option value="">Prefer not to say</option>
+              <option value="Female">Female</option>
+              <option value="Male">Male</option>
+              <option value="Other">Non-binary / Other</option>
             </select>
           </div>
         </div>
@@ -146,104 +148,110 @@
         </div>
       </section>
 
-      <!-- SECTION 4: PHQ-9 (scrollable single card with text buttons) -->
-<section class="section" data-step="4">
-  <label>10) Quick mood check (scroll to answer all)</label>
+      <!-- SECTION 4: PHQ-9 (scrollable single card with emoji legend) -->
+      <section class="section" data-step="4">
+        <label>10) Quick mood check — past 2 weeks (scroll to answer all)</label>
 
-  <div class="phq-card" id="phqCard" aria-label="PHQ-9 questions">
+        <div class="legend" aria-hidden="true" style="margin-top:8px">
+          <div class="item">😄 = Not at all</div>
+          <div class="item">😐 = Several days</div>
+          <div class="item">😞 = More than half the days</div>
+          <div class="item">😔 = Nearly every day</div>
+        </div>
 
-    <div class="phq-item" data-key="phq1_interest">
-      <div><strong>1.</strong> No or little interest in doing anything</div>
-      <div class="options" id="phq1_interest">
-        <div class="btn-opt" data-value="0">Not at all</div>
-        <div class="btn-opt" data-value="1">Several days</div>
-        <div class="btn-opt" data-value="2">More than half the days</div>
-        <div class="btn-opt" data-value="3">Nearly every day</div>
-      </div>
-    </div>
+        <div class="phq-card" id="phqCard" aria-label="PHQ-9 questions">
+          <div class="phq-item" data-key="phq1_interest">
+            <div><strong>1.</strong> No or little interest in doing anythin</div>
+            <div class="emoji-row" data-q="phq1_interest">
+              <button type="button" class="emoji-btn" data-value="0" title="Not at all">😄</button>
+              <button type="button" class="emoji-btn" data-value="1" title="Several days">😐</button>
+              <button type="button" class="emoji-btn" data-value="2" title="More than half the days">😞</button>
+              <button type="button" class="emoji-btn" data-value="3" title="Nearly every day">😔</button>
+            </div>
+          </div>
 
-    <div class="phq-item" data-key="phq2_down">
-      <div><strong>2.</strong> Feeling down, depressed, or hopeless</div>
-      <div class="options" id="phq2_down">
-        <div class="btn-opt" data-value="0">Not at all</div>
-        <div class="btn-opt" data-value="1">Several days</div>
-        <div class="btn-opt" data-value="2">More than half the days</div>
-        <div class="btn-opt" data-value="3">Nearly every day</div>
-      </div>
-    </div>
+          <div class="phq-item" data-key="phq2_down">
+            <div><strong>2.</strong> Feeling down, depressed, or hopeless</div>
+            <div class="emoji-row" data-q="phq2_down">
+              <button type="button" class="emoji-btn" data-value="0">😄</button>
+              <button type="button" class="emoji-btn" data-value="1">😐</button>
+              <button type="button" class="emoji-btn" data-value="2">😞</button>
+              <button type="button" class="emoji-btn" data-value="3">😔</button>
+            </div>
+          </div>
 
-    <div class="phq-item" data-key="phq3_sleep">
-      <div><strong>3.</strong> Irregular sleep schedules, or change in sleep patterns</div>
-      <div class="options" id="phq3_sleep">
-        <div class="btn-opt" data-value="0">Not at all</div>
-        <div class="btn-opt" data-value="1">Several days</div>
-        <div class="btn-opt" data-value="2">More than half the days</div>
-        <div class="btn-opt" data-value="3">Nearly every day</div>
-      </div>
-    </div>
+          <div class="phq-item" data-key="phq3_sleep">
+            <div><strong>3.</strong> Irregular sleep schedules, or change in sleep patterns</div>
+            <div class="emoji-row" data-q="phq3_sleep">
+              <button type="button" class="emoji-btn" data-value="0">😄</button>
+              <button type="button" class="emoji-btn" data-value="1">😐</button>
+              <button type="button" class="emoji-btn" data-value="2">😞</button>
+              <button type="button" class="emoji-btn" data-value="3">😔</button>
+            </div>
+          </div>
 
-    <div class="phq-item" data-key="phq4_energy">
-      <div><strong>4.</strong> Feeling lethargic or low on energy</div>
-      <div class="options" id="phq4_energy">
-        <div class="btn-opt" data-value="0">Not at all</div>
-        <div class="btn-opt" data-value="1">Several days</div>
-        <div class="btn-opt" data-value="2">More than half the days</div>
-        <div class="btn-opt" data-value="3">Nearly every day</div>
-      </div>
-    </div>
+          <div class="phq-item" data-key="phq4_energy">
+            <div><strong>4.</strong> Feeling lethargic</div>
+            <div class="emoji-row" data-q="phq4_energy">
+              <button type="button" class="emoji-btn" data-value="0">😄</button>
+              <button type="button" class="emoji-btn" data-value="1">😐</button>
+              <button type="button" class="emoji-btn" data-value="2">😞</button>
+              <button type="button" class="emoji-btn" data-value="3">😔</button>
+            </div>
+          </div>
 
-    <div class="phq-item" data-key="phq5_appetite">
-      <div><strong>5.</strong> Poor appetite or overeating</div>
-      <div class="options" id="phq5_appetite">
-        <div class="btn-opt" data-value="0">Not at all</div>
-        <div class="btn-opt" data-value="1">Several days</div>
-        <div class="btn-opt" data-value="2">More than half the days</div>
-        <div class="btn-opt" data-value="3">Nearly every day</div>
-      </div>
-    </div>
+          <div class="phq-item" data-key="phq5_appetite">
+            <div><strong>5.</strong> Poor appetite or overeating</div>
+            <div class="emoji-row" data-q="phq5_appetite">
+              <button type="button" class="emoji-btn" data-value="0">😄</button>
+              <button type="button" class="emoji-btn" data-value="1">😐</button>
+              <button type="button" class="emoji-btn" data-value="2">😞</button>
+              <button type="button" class="emoji-btn" data-value="3">😔</button>
+            </div>
+          </div>
 
-    <div class="phq-item" data-key="phq6_selfdoubt">
-      <div><strong>6.</strong> Self-doubt thoughts</div>
-      <div class="options" id="phq6_selfdoubt">
-        <div class="btn-opt" data-value="0">Not at all</div>
-        <div class="btn-opt" data-value="1">Several days</div>
-        <div class="btn-opt" data-value="2">More than half the days</div>
-        <div class="btn-opt" data-value="3">Nearly every day</div>
-      </div>
-    </div>
+          <div class="phq-item" data-key="phq6_selfdoubt">
+            <div><strong>6.</strong> Self-doubt thoughts</div>
+            <div class="emoji-row" data-q="phq6_selfdoubt">
+              <button type="button" class="emoji-btn" data-value="0">😄</button>
+              <button type="button" class="emoji-btn" data-value="1">😐</button>
+              <button type="button" class="emoji-btn" data-value="2">😞</button>
+              <button type="button" class="emoji-btn" data-value="3">😔</button>
+            </div>
+          </div>
 
-    <div class="phq-item" data-key="phq7_focus">
-      <div><strong>7.</strong> Trouble concentrating on tasks, schoolwork, or daily activities</div>
-      <div class="options" id="phq7_focus">
-        <div class="btn-opt" data-value="0">Not at all</div>
-        <div class="btn-opt" data-value="1">Several days</div>
-        <div class="btn-opt" data-value="2">More than half the days</div>
-        <div class="btn-opt" data-value="3">Nearly every day</div>
-      </div>
-    </div>
+          <div class="phq-item" data-key="phq7_focus">
+            <div><strong>7.</strong> Trouble concentrating on tasks, schoolwork, or daily activities</div>
+            <div class="emoji-row" data-q="phq7_focus">
+              <button type="button" class="emoji-btn" data-value="0">😄</button>
+              <button type="button" class="emoji-btn" data-value="1">😐</button>
+              <button type="button" class="emoji-btn" data-value="2">😞</button>
+              <button type="button" class="emoji-btn" data-value="3">😔</button>
+            </div>
+          </div>
 
-    <div class="phq-item" data-key="phq8_restless">
-      <div><strong>8.</strong> Feeling restless or slowed down compared to usual</div>
-      <div class="options" id="phq8_restless">
-        <div class="btn-opt" data-value="0">Not at all</div>
-        <div class="btn-opt" data-value="1">Several days</div>
-        <div class="btn-opt" data-value="2">More than half the days</div>
-        <div class="btn-opt" data-value="3">Nearly every day</div>
-      </div>
-    </div>
+          <div class="phq-item" data-key="phq8_restless">
+            <div><strong>8.</strong> Feeling restless or slowed down compared to usual</div>
+            <div class="emoji-row" data-q="phq8_restless">
+              <button type="button" class="emoji-btn" data-value="0">😄</button>
+              <button type="button" class="emoji-btn" data-value="1">😐</button>
+              <button type="button" class="emoji-btn" data-value="2">😞</button>
+              <button type="button" class="emoji-btn" data-value="3">😔</button>
+            </div>
+          </div>
 
-    <div class="phq-item" data-key="phq9_selfharm">
-      <div><strong>9.</strong> Thoughts that you would be better off dead or of hurting yourself</div>
-      <div class="options" id="phq9_selfharm">
-        <div class="btn-opt" data-value="0">Not at all</div>
-        <div class="btn-opt" data-value="1">Several days</div>
-        <div class="btn-opt" data-value="2">More than half the days</div>
-        <div class="btn-opt" data-value="3">Nearly every day</div>
-      </div>
-    </div>
+          <div class="phq-item" data-key="phq9_selfharm">
+            <div><strong>9.</strong> Self-harming or suicadal thoughts</div>
+            <div class="emoji-row" data-q="phq9_selfharm">
+              <button type="button" class="emoji-btn" data-value="0">😄</button>
+              <button type="button" class="emoji-btn" data-value="1">😐</button>
+              <button type="button" class="emoji-btn" data-value="2">😞</button>
+              <button type="button" class="emoji-btn" data-value="3">😔</button>
+            </div>
+          </div>
+        </div>
 
-  </div>
-</section>
+        </section>
 
       <!-- SECTION 5: Reflection -->
       <section class="section" data-step="5">
@@ -298,7 +306,7 @@
 
   <script>
     /********** CONFIG **********/
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQSh_mm6P-4dksKOlGNo1vbZnsqAplL5kqDko1MfOp1txhr7UtcXbRwr1q7KEmmTpJ/exec"; // <- replace after deploying Apps Script
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyNu_zAcVGWmMRTAmaFICJ4J3nqBjXbK7BIYHwWX7AY7_1qN608mhUkzC39MQT6U-6c/exec"; // <- replace after deploying Apps Script
 
     // final column headers (server-side should have these in row 1, timestamp is added by server)
     // Keep order in your Sheet exactly like this (timestamp first):
@@ -418,7 +426,7 @@
         document.getElementById('submitBtn').textContent = 'Submitting...';
         const res = await fetch(SCRIPT_URL, {
           method: 'POST',
-          <!-- mode: 'cors', -->
+          mode: 'no-cors',
           credentials: 'omit',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
@@ -507,3 +515,6 @@
   </script>
 </body>
 </html>
+
+
+
