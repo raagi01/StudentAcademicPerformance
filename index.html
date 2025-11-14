@@ -403,7 +403,7 @@
       // PHQ: send both text and index
       ['phq1_interest','phq2_down','phq3_sleep','phq4_energy','phq5_appetite','phq6_selfdoubt','phq7_focus','phq8_restless','phq9_selfharm'].forEach(key=>{
         const row = document.querySelector(`[data-q='${key}']`);
-        const active = row?.querySelector('.emoji-btn.active');
+        const active = row?.querySelector('.btn-opt.active');
         const idx = active ? active.dataset.value : '';
         payload[key] = idx !== '' ? PHQ_MAP[idx] : '';
         payload[ key + '_index' ] = idx !== '' ? Number(idx) : '';
@@ -524,6 +524,7 @@
   </script>
 </body>
 </html>
+
 
 
 
