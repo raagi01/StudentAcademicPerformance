@@ -82,10 +82,8 @@
           <div class="col">
             <label>2) Gender</label>
             <select id="gender" name="gender">
-              <option value="">Prefer not to say</option>
-              <option value="Female">Female</option>
-              <option value="Male">Male</option>
-              <option value="Other">Non-binary / Other</option>
+              <option value="0">Female</option>
+              <option value="1">Male</option>
             </select>
           </div>
         </div>
@@ -117,9 +115,9 @@
 
         <label style="margin-top:12px">6) Stress level lately</label>
         <div class="options" id="stress_level">
-          <div class="btn-opt" data-value="Low">Low</div>
-          <div class="btn-opt" data-value="Medium">Medium</div>
-          <div class="btn-opt" data-value="High">High</div>
+          <div class="btn-opt" data-value="0">Low</div>
+          <div class="btn-opt" data-value="1">Medium</div>
+          <div class="btn-opt" data-value="2">High</div>
         </div>
       </section>
 
@@ -127,24 +125,24 @@
       <section class="section" data-step="3">
         <label>7) Do you feel anxious about your studies/exams?</label>
         <div class="options" id="anxious_studies">
-          <div class="btn-opt" data-value="No">No</div>
-          <div class="btn-opt" data-value="Sometimes">Sometimes</div>
-          <div class="btn-opt" data-value="Often">Often</div>
+          <div class="btn-opt" data-value="2">No</div>
+          <div class="btn-opt" data-value="1">Sometimes</div>
+          <div class="btn-opt" data-value="0">Often</div>
         </div>
 
         <label style="margin-top:12px">8) How do you feel about your academic performance?</label>
         <div class="options" id="academic_confidence">
-          <div class="btn-opt" data-value="Confident">Confident</div>
-          <div class="btn-opt" data-value="Satisfied">Satisfied</div>
-          <div class="btn-opt" data-value="Unsure">Not sure</div>
-          <div class="btn-opt" data-value="NotSatisfied">Not satisfied</div>
+          <div class="btn-opt" data-value="3">Confident</div>
+          <div class="btn-opt" data-value="2">Satisfied</div>
+          <div class="btn-opt" data-value="1">Not sure</div>
+          <div class="btn-opt" data-value="0">Not satisfied</div>
         </div>
 
         <label style="margin-top:12px">9) Do you overthink about your studies/future?</label>
         <div class="options" id="overthinking">
-          <div class="btn-opt" data-value="Never">Never</div>
-          <div class="btn-opt" data-value="Sometimes">Sometimes</div>
-          <div class="btn-opt" data-value="VeryOften">Very often</div>
+          <div class="btn-opt" data-value="2">Never</div>
+          <div class="btn-opt" data-value="1">Sometimes</div>
+          <div class="btn-opt" data-value="0">Very often</div>
         </div>
       </section>
 
@@ -515,6 +513,7 @@
   </script>
 </body>
 </html>
+
 
 
 
