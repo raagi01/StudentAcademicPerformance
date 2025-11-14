@@ -152,10 +152,9 @@
 
   <div class="phq-card" id="phqCard" aria-label="PHQ-9 questions">
 
-    <!-- PHQ 1 -->
     <div class="phq-item" data-key="phq1_interest">
       <div><strong>1.</strong> No or little interest in doing anything</div>
-      <div class="options phq-options" data-q="phq1_interest">
+      <div class="options" id="phq1_interest">
         <div class="btn-opt" data-value="0">Not at all</div>
         <div class="btn-opt" data-value="1">Several days</div>
         <div class="btn-opt" data-value="2">More than half the days</div>
@@ -163,10 +162,9 @@
       </div>
     </div>
 
-    <!-- PHQ 2 -->
     <div class="phq-item" data-key="phq2_down">
       <div><strong>2.</strong> Feeling down, depressed, or hopeless</div>
-      <div class="options phq-options" data-q="phq2_down">
+      <div class="options" id="phq2_down">
         <div class="btn-opt" data-value="0">Not at all</div>
         <div class="btn-opt" data-value="1">Several days</div>
         <div class="btn-opt" data-value="2">More than half the days</div>
@@ -174,10 +172,9 @@
       </div>
     </div>
 
-    <!-- PHQ 3 -->
     <div class="phq-item" data-key="phq3_sleep">
       <div><strong>3.</strong> Irregular sleep schedules, or change in sleep patterns</div>
-      <div class="options phq-options" data-q="phq3_sleep">
+      <div class="options" id="phq3_sleep">
         <div class="btn-opt" data-value="0">Not at all</div>
         <div class="btn-opt" data-value="1">Several days</div>
         <div class="btn-opt" data-value="2">More than half the days</div>
@@ -185,10 +182,9 @@
       </div>
     </div>
 
-    <!-- PHQ 4 -->
     <div class="phq-item" data-key="phq4_energy">
       <div><strong>4.</strong> Feeling lethargic or low on energy</div>
-      <div class="options phq-options" data-q="phq4_energy">
+      <div class="options" id="phq4_energy">
         <div class="btn-opt" data-value="0">Not at all</div>
         <div class="btn-opt" data-value="1">Several days</div>
         <div class="btn-opt" data-value="2">More than half the days</div>
@@ -196,10 +192,9 @@
       </div>
     </div>
 
-    <!-- PHQ 5 -->
     <div class="phq-item" data-key="phq5_appetite">
       <div><strong>5.</strong> Poor appetite or overeating</div>
-      <div class="options phq-options" data-q="phq5_appetite">
+      <div class="options" id="phq5_appetite">
         <div class="btn-opt" data-value="0">Not at all</div>
         <div class="btn-opt" data-value="1">Several days</div>
         <div class="btn-opt" data-value="2">More than half the days</div>
@@ -207,10 +202,9 @@
       </div>
     </div>
 
-    <!-- PHQ 6 -->
     <div class="phq-item" data-key="phq6_selfdoubt">
       <div><strong>6.</strong> Self-doubt thoughts</div>
-      <div class="options phq-options" data-q="phq6_selfdoubt">
+      <div class="options" id="phq6_selfdoubt">
         <div class="btn-opt" data-value="0">Not at all</div>
         <div class="btn-opt" data-value="1">Several days</div>
         <div class="btn-opt" data-value="2">More than half the days</div>
@@ -218,10 +212,9 @@
       </div>
     </div>
 
-    <!-- PHQ 7 -->
     <div class="phq-item" data-key="phq7_focus">
       <div><strong>7.</strong> Trouble concentrating on tasks, schoolwork, or daily activities</div>
-      <div class="options phq-options" data-q="phq7_focus">
+      <div class="options" id="phq7_focus">
         <div class="btn-opt" data-value="0">Not at all</div>
         <div class="btn-opt" data-value="1">Several days</div>
         <div class="btn-opt" data-value="2">More than half the days</div>
@@ -229,10 +222,9 @@
       </div>
     </div>
 
-    <!-- PHQ 8 -->
     <div class="phq-item" data-key="phq8_restless">
       <div><strong>8.</strong> Feeling restless or slowed down compared to usual</div>
-      <div class="options phq-options" data-q="phq8_restless">
+      <div class="options" id="phq8_restless">
         <div class="btn-opt" data-value="0">Not at all</div>
         <div class="btn-opt" data-value="1">Several days</div>
         <div class="btn-opt" data-value="2">More than half the days</div>
@@ -240,10 +232,9 @@
       </div>
     </div>
 
-    <!-- PHQ 9 -->
     <div class="phq-item" data-key="phq9_selfharm">
       <div><strong>9.</strong> Thoughts that you would be better off dead or of hurting yourself</div>
-      <div class="options phq-options" data-q="phq9_selfharm">
+      <div class="options" id="phq9_selfharm">
         <div class="btn-opt" data-value="0">Not at all</div>
         <div class="btn-opt" data-value="1">Several days</div>
         <div class="btn-opt" data-value="2">More than half the days</div>
@@ -253,7 +244,6 @@
 
   </div>
 </section>
-
 
       <!-- SECTION 5: Reflection -->
       <section class="section" data-step="5">
@@ -394,16 +384,13 @@
       payload.overthinking = pickOpt('overthinking');
 
       // PHQ: send both text and index
-      ['phq1_interest','phq2_down','phq3_sleep','phq4_energy','phq5_appetite','phq6_selfdoubt','phq7_focus','phq8_restless','phq9_selfharm']
-      .forEach(key => {
-          const row = document.querySelector(`.phq-options[data-q='${key}']`);
-          const active = row?.querySelector('.btn-opt.active');
-          const idx = active ? active.dataset.value : '';
-
-          payload[key] = idx !== '' ? PHQ_MAP[idx] : '';
-          payload[key + "_index"] = idx !== '' ? Number(idx) : '';
+      ['phq1_interest','phq2_down','phq3_sleep','phq4_energy','phq5_appetite','phq6_selfdoubt','phq7_focus','phq8_restless','phq9_selfharm'].forEach(key=>{
+        const row = document.querySelector(`[data-q='${key}']`);
+        const active = row?.querySelector('.emoji-btn.active');
+        const idx = active ? active.dataset.value : '';
+        payload[key] = idx !== '' ? PHQ_MAP[idx] : '';
+        payload[ key + '_index' ] = idx !== '' ? Number(idx) : '';
       });
-
 
       // mood + free text
       const moodActive = document.querySelector('#mood_rating .emoji-btn.active');
